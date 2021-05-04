@@ -5,19 +5,25 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace SignalRDemoApp
 {
-    public class Startup
-    {
-        public static void Main(string[] args)
-        {
-            WebHost.CreateDefaultBuilder(args)
-                .ConfigureServices(services => services.AddSignalR())
-                .Configure(app => app
-                    .UseDefaultFiles()
-                    .UseStaticFiles()
-                    .UseSignalR(routes => routes.MapHub<DefaultHub>("/signalr/default"))
-                )
-                .Build()
-                .Run();
-        }
-    }
+	public class Startup
+	{
+		public static void Main(string[] args)
+		{
+			WebHost.CreateDefaultBuilder(args)
+				.ConfigureServices(services =>
+					services.AddSignalR()
+				)
+				.Configure(app => app
+					.UseDefaultFiles()
+					.UseStaticFiles()
+					.UseRouting()
+					.UseEndpoints(endpoints =>
+					{
+						endpoints.MapHub<DefaultHub>("/signalr/default");
+					})
+				)
+				.Build()
+				.Run();
+		}
+	}
 }
